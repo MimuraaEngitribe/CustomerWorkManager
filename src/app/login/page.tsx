@@ -1,22 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const router = useRouter();
-  // TODO:submit後の処理は遷移先のページ作成後にコメントアウトを除去する
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // ここで認証を行います。成功したらダッシュボードにリダイレクトします。
-  //   router.push('/dashboard');
-  // };
+  //const router = useRouter();
+
+  const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // ここで認証を行います。成功したらダッシュボードにリダイレクトします。
+    // router.push({
+    //   pathname: '/require_list',
+    //   query: { email: email, password: password },
+    // });
+  };
+
+  useEffect(() => {
+    // Any side effects here
+  }, [email, password]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
         <div>
             <label>メールアドレス</label>
         </div><div>
