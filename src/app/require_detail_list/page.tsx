@@ -35,10 +35,10 @@ export default function Home() {
 
     <main className="flex flex-col min-h-screen py-2 bg-gray-200">
       <title>
-          案件-一覧
+          案件-詳細
       </title>
       <h1 className="text-3xl font-bold ">
-          案件-一覧
+          案件-詳細
       </h1>
       <div className='flex flex-col items-center justify-center min-h-full'>
         <div className="grid grid-cols-2 w-1/2 gap-4 bg-white shadow-xl devide-y divide-blue-200 p-5 rounded-md">
