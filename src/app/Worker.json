@@ -1,0 +1,23 @@
+[
+    {
+      "name": "新井",
+      "status": "配属",
+      "startDate": "2023-01-01",
+      "endDate": "2023-12-31",
+      "companyID":"12345"
+    },
+    {
+        "name": "乾",
+        "status": "配属",
+        "startDate": "2022-01-01",
+        "endDate": "2022-12-31",
+        "companyID":"12345"
+    },
+    {
+        "name": "宇藤",
+        "status": "未配属",
+        "startDate": "2020-01-01",
+        "endDate": "2020-12-31",
+        "companyID":"12345"
+    }
+]
