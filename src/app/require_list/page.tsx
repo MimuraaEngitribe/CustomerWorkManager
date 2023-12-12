@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Worker from "../Worker.json"
 import 'tailwindcss/tailwind.css'
 
 export default function Home() {
@@ -122,6 +123,22 @@ export default function Home() {
                 <option value="showListNum3">100件ずつ</option>
           </select>
           <button className="bg-sky-500 hover:bg-sky-700 text-white font-bold col-span-2 justify-center mx-10">表示</button>
+          <table>
+            <tr>
+              <th>企業名</th>
+              <th>ステータス</th>
+              <th>開始日</th>
+              <th>終了日</th>
+            </tr>
+            {Worker.map((worker, index) => (
+              <tr key={index}>
+                <td>{worker.name}</td>
+                <td>{worker.status}</td>
+                <td>{worker.startDate}</td>
+                <td>{worker.endDate}</td>
+              </tr>
+            ))}
+          </table>
         </div>
       </div>
     </main>
