@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Worker from "../Worker.json"
 import 'tailwindcss/tailwind.css'
 
@@ -13,6 +13,7 @@ export default function Home() {
   const [selectInternalWorkerStatus, setselectInternalWorkerStatus] = useState('');
   const [selectDepartment, setselectDepartment] = useState('');
   const [selectListNum, setselectListNum] = useState('');
+  const [employees, setEmployees] = useState([]);
 
   const handleChange_SelectCompany = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setselectCompany(e.target.value);
@@ -44,7 +45,24 @@ export default function Home() {
   const handleChange_SelectListNum = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setselectListNum(e.target.value);
   };
+  
+  useEffect(() => {
+    async function fetchEmployees() {
+      try {
+        const response = await fetch('http://localhost:8080/getEmploee');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setEmployees(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
 
+    fetchEmployees();
+  }, []);
+  
   return (
 
     <main className="flex flex-col min-h-screen py-2 bg-gray-200">
@@ -84,7 +102,7 @@ export default function Home() {
                 <option value="worker2">ジャンルB</option>
                 <option value="worker3">ジャンルC</option>
           </select>
-          <label for="message">詳細</label>
+          <label>詳細</label>
           <textarea id="message" rows="4" className="block px-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring focus:ring-blue-300" placeholder="詳細を記載"></textarea>
           <label>期間</label>
           <div className="grid grid-cols-1">
@@ -138,9 +156,18 @@ export default function Home() {
                 <td>{worker.endDate}</td>
               </tr>
             ))}
+            {employees.map((worker, index) => (
+              <tr key={index}>
+                <td>{worker.name}</td>
+                <td>{worker.status}</td>
+                <td>{worker.startDate}</td>
+                <td>{worker.endDate}</td>
+              </tr>
+            ))}
           </table>
         </div>
       </div>
     </main>
   );
 }
+
