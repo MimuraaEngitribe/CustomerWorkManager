@@ -4,6 +4,18 @@ import { useEffect, useState } from 'react';
 import Worker from "../Worker.json"
 import 'tailwindcss/tailwind.css'
 import useSWR from 'swr'
+import {gql} from "@apollo/client"
+
+const employee = gql`
+  query {
+    employee {
+      name;
+      status;
+      startDate;
+      endDate;
+    }
+  }
+`
 
 export default function Home() {
   const [selectCompany, setselectCompany] = useState('');
