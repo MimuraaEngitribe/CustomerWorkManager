@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Worker from "../Worker.json"
 import 'tailwindcss/tailwind.css'
+import useSWR from 'swr'
 
 export default function Home() {
   const [selectCompany, setselectCompany] = useState('');
@@ -13,7 +14,6 @@ export default function Home() {
   const [selectInternalWorkerStatus, setselectInternalWorkerStatus] = useState('');
   const [selectDepartment, setselectDepartment] = useState('');
   const [selectListNum, setselectListNum] = useState('');
-  const [employees, setEmployees] = useState([]);
 
   const handleChange_SelectCompany = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setselectCompany(e.target.value);
@@ -45,26 +45,22 @@ export default function Home() {
   const handleChange_SelectListNum = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setselectListNum(e.target.value);
   };
-  
-  useEffect(() => {
-    async function fetchEmployees() {
-      try {
-        const response = await fetch('http://localhost:8080/getEmploee');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        setEmployees(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
 
-    fetchEmployees();
-  }, []);
-  
+  interface Employee {
+    id: string;
+    name: string;
+    status:boolean;
+    startDate:string;
+    endDate:string;
+   }
+
+  async function fetcher(key: string, init?: RequestInit) {
+    return fetch(key, init).then((res) => res.json() as Promise<Employee[] | null>);
+   }
+
+  const {data: employees, error} = useSWR('http://localhost:8080/getEmploee', fetcher);
+
   return (
-
     <main className="flex flex-col min-h-screen py-2 bg-gray-200">
       <title>
           案件-一覧
@@ -156,14 +152,18 @@ export default function Home() {
                 <td>{worker.endDate}</td>
               </tr>
             ))}
-            {employees.map((worker, index) => (
-              <tr key={index}>
-                <td>{worker.name}</td>
-                <td>{worker.status}</td>
-                <td>{worker.startDate}</td>
-                <td>{worker.endDate}</td>
-              </tr>
-            ))}
+            {
+              typeof employees === "undefined" || null == employees
+               ? (<tr>loading...</tr>)
+               : (employees.map((worker, index) => (
+                <tr key={index}>
+                  <td>{worker.name}</td>
+                  <td>{worker.status}</td>
+                  <td>{worker.startDate}</td>
+                  <td>{worker.endDate}</td>
+                </tr>
+              )))
+            }
           </table>
         </div>
       </div>
