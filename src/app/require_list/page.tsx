@@ -1,21 +1,30 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { Component, useEffect, useState } from 'react';
 import Worker from "../Worker.json"
 import 'tailwindcss/tailwind.css'
 import useSWR from 'swr'
-import {gql} from "@apollo/client"
+import {ApolloClient, ApolloProvider, InMemoryCache, gql, useQuery} from "@apollo/client"
 
-const employee = gql`
-  query {
-    employee {
-      name;
-      status;
-      startDate;
-      endDate;
-    }
-  }
+const client = new ApolloClient({
+  uri: "http://localhost:8080",
+  cache: new InMemoryCache(),
+});
+
+const COMPANY = gql`
+query {
+  hello(greating_id: "1")
+}
 `
+
+function Company(){
+  const {loading, error, data} = useQuery(COMPANY, {client});
+
+  if (loading) return "loading";
+  if (error) return "error" + error;
+  console.log(data);
+  return data;
+} 
 
 export default function Home() {
   const [selectCompany, setselectCompany] = useState('');
@@ -175,6 +184,16 @@ export default function Home() {
                   <td>{worker.endDate}</td>
                 </tr>
               )))
+            }
+          </table>
+
+          <table>
+            <tr>
+              <th>企業名</th>
+              <th>企業ID</th>
+            </tr>
+            {
+              Company()
             }
           </table>
         </div>
