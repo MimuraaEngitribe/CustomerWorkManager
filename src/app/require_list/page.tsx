@@ -5,15 +5,19 @@ import Worker from "../Worker.json"
 import 'tailwindcss/tailwind.css'
 import useSWR from 'swr'
 import {ApolloClient, ApolloProvider, InMemoryCache, gql, useQuery} from "@apollo/client"
+import axios from 'axios';
 
 const client = new ApolloClient({
-  uri: "http://localhost:8080",
+  uri: "http://localhost:3000/api/graphql/",
   cache: new InMemoryCache(),
 });
 
 const COMPANY = gql`
 query {
-  hello(greating_id: "1")
+  getCompanies {
+    id
+    name
+  }
 }
 `
 
@@ -22,8 +26,18 @@ function Company(){
 
   if (loading) return "loading";
   if (error) return "error" + error;
-  console.log(data);
-  return data;
+  
+  class company {
+    name!: string;
+    id!: number;
+  }
+
+  return data.getCompanies.map((company: company, index: number) => (
+    <tr key={index}>
+      <td>{company.name}</td>
+      <td>{company.id}</td>
+    </tr>
+  ));
 } 
 
 export default function Home() {
@@ -35,6 +49,8 @@ export default function Home() {
   const [selectInternalWorkerStatus, setselectInternalWorkerStatus] = useState('');
   const [selectDepartment, setselectDepartment] = useState('');
   const [selectListNum, setselectListNum] = useState('');
+  const [companyName, setcompanyName] = useState("");
+  const [companyId, setcompanyId] = useState("");
 
   const handleChange_SelectCompany = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setselectCompany(e.target.value);
@@ -75,14 +91,15 @@ export default function Home() {
     endDate:string;
    }
 
-  async function fetcher(key: string, init?: RequestInit) {
-    return fetch(key, init).then((res) => res.json() as Promise<Employee[] | null>);
-   }
 
-  const {data: employees, error} = useSWR('http://localhost:8080/getEmploee', fetcher);
+  // async function fetcher(key: string, init?: RequestInit) {
+  //   return fetch(key, init).then((res) => res.json() as Promise<Employee[] | null>);
+  //  }
+
+  // const {data: employees, error} = useSWR('http://localhost:8080/getEmploee', fetcher);
 
   return (
-    <main className="flex flex-col min-h-screen py-2 bg-gray-200">
+    <div className="flex flex-col min-h-screen py-2 bg-gray-200">
       <title>
           案件-一覧
       </title>
@@ -120,7 +137,7 @@ export default function Home() {
                 <option value="worker3">ジャンルC</option>
           </select>
           <label>詳細</label>
-          <textarea id="message" rows="4" className="block px-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring focus:ring-blue-300" placeholder="詳細を記載"></textarea>
+          <textarea id="message" rows={4} className="block px-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring focus:ring-blue-300" placeholder="詳細を記載"></textarea>
           <label>期間</label>
           <div className="grid grid-cols-1">
             <label>ラベル名</label>
@@ -173,7 +190,7 @@ export default function Home() {
                 <td>{worker.endDate}</td>
               </tr>
             ))}
-            {
+            {/* {
               typeof employees === "undefined" || null == employees
                ? (<tr>loading...</tr>)
                : (employees.map((worker, index) => (
@@ -184,7 +201,7 @@ export default function Home() {
                   <td>{worker.endDate}</td>
                 </tr>
               )))
-            }
+            } */}
           </table>
 
           <table>
@@ -198,7 +215,6 @@ export default function Home() {
           </table>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
-

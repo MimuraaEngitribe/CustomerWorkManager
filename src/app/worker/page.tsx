@@ -34,7 +34,7 @@ export default function NewPage() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen py-2 bg-gray-200">
+    <div className="flex flex-col min-h-screen py-2 bg-gray-200">
         <title>
             案件-担当
         </title>
@@ -50,8 +50,8 @@ export default function NewPage() {
               <option value="option2">企業2</option>
               <option value="option3">企業3</option>
           </select>
-          <label for="Detail">詳細</label>
-          <textarea id="Detail" rows="4" className="block px-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring focus:ring-blue-300" placeholder="詳細を記載"></textarea>
+          <label htmlFor="Detail">詳細</label>
+          <textarea id="Detail" rows={4} className="block px-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring focus:ring-blue-300" placeholder="詳細を記載"></textarea>
           <label>期間</label>
           <select className="border border-slate-300 focus:ring focus:ring-blue-300" value={selectTerm} onChange={handleChange_SelectTerm}>
                 <option value="">選択してください</option>
@@ -77,6 +77,6 @@ export default function NewPage() {
           <button className="bg-sky-500 hover:bg-sky-700 text-white font-bold col-span-2 justify-center mx-10">表示</button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
